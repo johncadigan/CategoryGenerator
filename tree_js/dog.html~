@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type">
+
+        <title>Hyponym Demo</title>
+	<link rel="stylesheet" href="dist/themes/default/style.min.css" />
+   </head>
+<body>
+
+<div id="using_json" ></div>
+
+
+
+
+
+
+<script src="dist/libs/jquery.js"></script>
+<script src="dist/jstree.min.js"></script>
+
+
+<script>
+$(document).ready(function () {
+$('#using_json').jstree({ 'core' : {
+    'data' : 
+[
+	{"id": "animal", "text" : "animal", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [{"id": "dog", "text" : "dog", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [{"id": "cardigan", "text" : "cardigan", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "chow", "text" : "chow", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "puppy", "text" : "puppy", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "boxer", "text" : "boxer", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "collie", "text" : "collie", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "pug", "text" : "pug", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "courser", "text" : "courser", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "hound", "text" : "hound", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [{"id": "bloodhound", "text" : "bloodhound", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }, {"id": "beagle", "text" : "beagle", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }], "li_attr" : [], "a_atrr" : [] }, {"id": "terrier", "text" : "terrier", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [{"id": "cairn", "text" : "cairn", "icon" : "string", "state" : { "opened" : true, "disabled"  : false, "selected" : false}, "children" : [], "li_attr" : [], "a_atrr" : [] }], "li_attr" : [], "a_atrr" : [] }], "li_attr" : [], "a_atrr" : [] }], "li_attr" : [], "a_atrr" : [] }
+]
+} });
+$('#using_json').on("changed.jstree", function (e, data) {
+  console.log(data.selected);
+});
+
+});
+
+
+</script>
+</body>
+</html>
+

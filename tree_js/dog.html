@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type">
+
+        <title>Hyponym Demo</title>
+	<link rel="stylesheet" href="dist/themes/default/style.min.css" />
+   </head>
+<body>
+
+<div id="using_json" ></div>
+
+
+
+
+
+
+<script src="dist/libs/jquery.js"></script>
+<script src="dist/jstree.min.js"></script>
+<script src="dog.js"></script>
+
+
+<script>
+$(document).ready(function () {
+$('#using_json').jstree({ 'core' : {
+    'data' : 
+[
+	TreeData
+]
+} });
+$('#using_json').on("changed.jstree", function (e, data) {
+  console.log(data.selected);
+});
+
+});
+
+
+</script>
+</body>
+</html>
+
