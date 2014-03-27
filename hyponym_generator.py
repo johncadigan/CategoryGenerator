@@ -1,8 +1,13 @@
 
 from nltk.corpus import wordnet as wn
-import sys, threading, os, re
+import sys, os
 
-COUNTS_DIR = '/media/New Volume/Datastore/Natural Language/'
+CURRENT_DIR = os.path.dirname(__file__)
+
+##### Default Settings
+DATA_DIR = 'data'
+COUNTS_FILE = 'word-totals.txt'
+WHITE_LIST = 'whitelist.csv'
 DEFAULT_LIMIT = 50000
 DEFAULT_DEPTH = 5
 DEFAULT_SYNSETS = 3
@@ -23,17 +28,28 @@ class HyponymGenerator():
 		self.synset_limit = DEFAULT_SYNSETS
 
 		#Add only relevant word frequencies
-		unigram_file = os.path.join(COUNTS_DIR, 'Google {0}-grams/{0}-gram total.txt'.format(1))
+		data_dir = os.path.join(CURRENT_DIR, DATA_DIR)
+		unigram_file = os.path.join(data_dir, COUNTS_FILE)
 		with open(unigram_file, "r") as unigrams:
 			unigrams = unigrams.readlines()
 			for unigram in unigrams:
-				unigram, frequency = unigram.split('\t')
+				word, frequency = unigram.split('\t')
 				frequency = int(frequency)
 				if frequency >= self.frequency_limit:
-					self.unigram_frequencies[unigram] = frequency
+					self.unigram_frequencies[word] = frequency
 			del unigrams
 		
-	def settings(self):
+		#Add a whitelist of categories already in use
+		white_file = os.path.join(data_dir, WHITE_LIST)
+		with open(white_file, "r") as whitelist:
+			whiteline = whitelist.readlines()
+			for line in whiteline:
+				wwords = line.split(',')
+				for wword in wwords:
+					self.whitewords.append(wword.strip().lower())
+					
+		
+	def settings(self): #prints settings
 		print "Current Settings \t Frequency limit {0} \t Depth limit {1} \t Synset limit {2}".format(self.frequency_limit, self.depth_limit, self.synset_limit)
 	
 	def change_settings(self):
@@ -98,9 +114,6 @@ class HyponymGenerator():
 				else:
 					return [word]
 	
-	
-	
-	
 	def print_branches(self, key, dpth):
 		print "\t"*(dpth-1)+ "==={0}===".format(self.format_word(key))
 		if self.pruned_tree.has_key(key):
@@ -133,48 +146,50 @@ class HyponymGenerator():
 		self.print_branches(root, 1)
 				
 
-	def prune_category_tree(self, dic, lvl, branches):
+	def prune_category_tree(self, dic, lvl, branches): #Turns the lists into a dictionary which is turned into a tree object
 		lvl += 1
-		dic.setdefault(lvl, [])
+		dic.setdefault(lvl, []) #Stores words at each level of the tree
 		if branches == None:
 			return {'': ''}
 		for x in branches:
 			parent = x[0]
-			dic.setdefault(parent, [])
+			dic.setdefault(parent, []) #Stores the children of a parent
 			if type(x[1:][0]) == list:
 				#If second part is a list
-				if(len(x[1:][0])) > 0:
-					if type(x[1:][0][0]) == str:
+				if(len(x[1:][0])) > 0: # if the parent has children
+					if type(x[1:][0][0]) == str: #if there are no grandchildren (a list would indicate grandchildren)
 						dic[parent].append(x[1:][0][0])
 						dic[lvl].append(x[1:][0][0])
-					else:
-						dic[parent].append(x[1:][0][0][0])
-						dic.update(self.prune_category_tree(dic, lvl, x[1:][0]))
+					else: #if there are grandchildren
+						dic[parent].append(x[1:][0][0][0]) # Adds child
+						dic.update(self.prune_category_tree(dic, lvl, x[1:][0])) #runs recursively to add grandchildren
 		return dic
 			
 	
-	def add_child(self,parent, child):
+	def add_child(self,parent, child): #Adds a child to a parent
 		self.tree.create_node(child, child, parent = parent)
 	
-	def add_family(self, parent, children):
+	def add_family(self, parent, children): #Adds children to parent
 		for child in children:
 			self.add_child(parent,child)
 	
-	def add_entire_family(self, parent):
+	def add_entire_family(self, parent): #Adds entire family
 		if self.pruned_tree.has_key(parent):
 			queue = self.pruned_tree[parent]
 			for element in queue:
 				self.add_child(parent, element)  
 				self.add_entire_family(element)# recursive call
 	
-	def set_tree(self):
+	def set_tree(self): #Overriden function
+		pass
+	
+	def final_menu(self): #Overriden function
 		pass
 	
 	def check_whitelist(self, word):
 		if self.whitewords.count(word) > 0:
 			word += '@'
 		return word
-	
 	
 	
 	def format_word(self, word):

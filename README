@@ -1,3 +1,41 @@
 Dependencies:
 Natural Language Toolkit + Wordnet data
 
+*JSON export:
+jstree library included in tree_js
+
+*DB export:
+sqlalchemy, extensions for desired db (eg. python-mysqldb)
+
+
+Program files:
+tree.py: an implementation of trees
+hyponym_generator.py: a generic generator for both json and db based branches
+js_hyponym_trees.py: inherits from tree.py and hyponym_generator.py and makes them export to json
+db_hyponym_trees.py: inherits tree.py and hyponym_generator.py and makes them export to a database
+
+Data files:
+whitelist.csv: a file to contain existing categories so that they can be marked with '@' during tree generation
+word-totals.txt: a file of unigrams occuring more than 40,000 times in the google unigram corpus
+
+Set-up:
+
+Install nltk and its dependencies with pip:
+$pip install -U numpy
+$pip install -U pyyaml
+$pip install -U nltk
+
+Download wordnet corpora:
+$python
+>>>import nltk
+>>>nltk.download()
+Download wordnet and wordnet_ic from the GUI interface
+
+Instructions:
+Run either js_hyponym_trees.py for json export or db_hyponym_trees.py for export to a db via sqlalchemy
+
+
+
+
+
+
